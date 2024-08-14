@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const { trimmedValue } = require("../helper/functions");
 const { User, Achievement, UserAchievement } = require("../helper/relation");
 
@@ -28,7 +29,7 @@ exports.CheckAndAddAchievements = async (userId) => {
         addedAchievements.push({
           title: achievement.title,
           level: achievement.level,
-          required_points: achievement.required_points
+          required_points: achievement.required_points,
         });
       }
     }
@@ -54,7 +55,9 @@ exports.CheckAndAddAchievements = async (userId) => {
 
 exports.getAllAchievements = async (req, res) => {
   try {
-    const datas = await Achievement.findAll();
+    const datas = await Achievement.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
     if (!datas.length) {
       return res
         .status(404)
@@ -79,6 +82,36 @@ exports.createAchievement = async (req, res) => {
       return res
         .status(400)
         .json({ status: 400, msg: "All fields are required" });
+    }
+
+    const achievementData = await Achievement.findAll({
+      where: {
+        [Op.or]: [{ title }, { required_points }],
+      },
+    });
+
+    if (achievementData.length > 0) {
+      return res.status(400).json({
+        status: 400,
+        msg: "An achievement with the same title or required points already exists",
+      });
+    }
+
+    if (required_points % 100 != 0) {
+      return res
+        .status(400)
+        .json({ status: 400, msg: "Invalid required points" });
+    }
+
+    const validLevel = ["Beginner", "Intermediate", "Advanced", "Expert"];
+
+    if (!validLevel.find((levels) => levels == level)) {
+      return res
+        .status(400)
+        .json({
+          status: 400,
+          msg: "Invalid level. Please select one of the following: Beginner, Intermediate, Advanced, Expert.",
+        });
     }
 
     const newAchievement = await Achievement.create({

@@ -1,5 +1,10 @@
 const { trimmedValue, isStrongPassword } = require("../helper/functions.js");
-const { User, Leaderboard, Achievement } = require("../helper/relation.js");
+const {
+  User,
+  Leaderboard,
+  Achievement,
+  UserAchievement,
+} = require("../helper/relation.js");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -40,18 +45,24 @@ exports.updateUser = async (req, res) => {
     const { userId } = req.query;
     const { points } = req.body;
 
+    const UserAchievements = await UserAchievement.findAll({
+      where: { userId },
+    });
+
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ status: 404, msg: "User tidak ditemukan" });
     }
 
     const updatedData = {
+      achievement: UserAchievements.length || 0,
       points: user.points + parseInt(points || 0),
     };
 
     await user.update(updatedData);
 
     const achievementResult = await CheckAndAddAchievements(userId);
+
     await updateLeaderboard();
 
     res.status(200).json({
@@ -59,7 +70,7 @@ exports.updateUser = async (req, res) => {
       msg: "User updated successfully",
       status_achievements: achievementResult.status,
       msg_achievements: achievementResult.message,
-      newAchievements : achievementResult.data
+      newAchievements: achievementResult.data,
     });
   } catch (error) {
     res.status(500).json({ status: 500, msg: error.message });
