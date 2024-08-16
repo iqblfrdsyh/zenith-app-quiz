@@ -50,18 +50,19 @@ exports.updateUser = async (req, res) => {
     });
 
     const user = await User.findByPk(userId);
-    if (!user) {
-      return res.status(404).json({ status: 404, msg: "User tidak ditemukan" });
-    }
 
-    const updatedData = {
-      achievement: UserAchievements.length || 0,
-      points: user.points + parseInt(points || 0),
-    };
 
-    await user.update(updatedData);
+    user.points += parseInt(points || 0);
+    await user.save();
 
     const achievementResult = await CheckAndAddAchievements(userId);
+
+
+    const totalAchievements = await UserAchievement.count({
+      where: { userId },
+    });
+
+    await user.update({ achievement: totalAchievements });
 
     await updateLeaderboard();
 
