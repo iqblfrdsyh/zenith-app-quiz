@@ -29,6 +29,6 @@ exports.GenAI = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ status: 500, error: "Failed to interact with the AI model" });
+      .json({ status: 500, msg: "Failed to interact with the AI model" });
   }
 };
