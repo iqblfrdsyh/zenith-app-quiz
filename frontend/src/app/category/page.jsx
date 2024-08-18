@@ -29,7 +29,7 @@ const Category = () => {
           <div className="mt-4 grid grid-cols-2 justify-items-center items-center ">
             {DataCategories.map((data) => (
               <Popup
-                key={data.id} // Ensure to move `key` to Popup component level
+                key={data.id} 
                 title={"Sorry"}
                 icon={"error"}
                 text={"For now can't be click"}
