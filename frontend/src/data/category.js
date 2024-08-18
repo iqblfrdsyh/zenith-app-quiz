@@ -43,7 +43,7 @@ const DataCategories = [
   },
   {
     id: 8,
-    name: "Technology",
+    name: "Tech",
     icon: "./images/icons/technology.svg",
     isHots: true,
   },

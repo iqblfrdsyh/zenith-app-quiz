@@ -3,7 +3,7 @@ import { Button } from "@nextui-org/react";
 
 const Home = () => {
   return (
-    <div className="w-full p-3 bg-gradient-to-b from-white to-teal-200 relative">
+    <div className="w-full h-full p-3 bg-gradient-to-b from-white to-teal-200 relative">
       <div className="flex flex-col px-3">
         <div className="w-full flex items-center -ms-4">
           <img src="/images/logo2.png" />
