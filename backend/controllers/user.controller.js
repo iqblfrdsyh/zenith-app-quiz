@@ -45,18 +45,12 @@ exports.updateUser = async (req, res) => {
     const { userId } = req.query;
     const { points } = req.body;
 
-    const UserAchievements = await UserAchievement.findAll({
-      where: { userId },
-    });
-
     const user = await User.findByPk(userId);
-
 
     user.points += parseInt(points || 0);
     await user.save();
 
     const achievementResult = await CheckAndAddAchievements(userId);
-
 
     const totalAchievements = await UserAchievement.count({
       where: { userId },

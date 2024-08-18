@@ -1,17 +1,13 @@
 // import { Cards } from "@/components/cards";
 // import { Finalscore } from "@/components/finalscore";
 
-import MenuBar from "@/components/menu";
-
 // import { Finalscore } from "@/components/finalscore";
-
 
 const Home = () => {
   return (
-    <div className="w-full h-screen p-3 border-black relative">
-      <MenuBar className="fixed left-0 right-0 bottom-0" />
+    <div className="w-full h-screen p-3 border-black">
       <div className="flex flex-col px-3">
-        <div className="w-full flex items-center  -ms-4">
+        <div className="w-full flex items-center -ms-4">
           <img src="/images/logo2.png" />
           <h1 className="font-bold text-3xl text-teal-400">Zenith</h1>
         </div>
