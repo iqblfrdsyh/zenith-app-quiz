@@ -1,7 +1,8 @@
 import { Cards } from "@/components/cards";
 import { DataCategories } from "@/data/category";
 import React from "react";
-import "@/styles/category.css"
+import "@/styles/category.css";
+import Popup from "@/components/popup";
 
 const Category = () => {
   return (
@@ -11,11 +12,14 @@ const Category = () => {
       </h2>
       <div className="mx-5 grid grid-cols-2 justify-items-center items-center ">
         {DataCategories.map((data) => (
-          <Cards.CardCategory
-            key={data.id}
-            image={data.icon}
-            title={data.name}
-          />
+          <Popup title={"Sorry"} icon={"error"} text={"For now can't be click"}>
+            <Cards.CardCategory
+              key={data.id}
+              image={data.icon}
+              title={data.name}
+              isHots={data.isHots}
+            />
+          </Popup>
         ))}
       </div>
     </>
