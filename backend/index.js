@@ -15,18 +15,25 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 app.use(cookieParser());
 
+app.get("/", (req, res) => {
+  res.json({ status: 200, msg: "Welcome to Backend Zenith!" });
+});
+
 app.get("/api/v1", (req, res) => {
-  res.json({ msg: "api ready!" });
+  res.json({ status: 200, msg: "API Ready!" });
 });
 
 Object.values(routes).forEach((route) => {
   app.use("/api/v1", route);
 });
 
-app.get('*',(req,res) => {
-  res.json({status:404,msg: `Not found route : http://localhost:${PORT}${req.params[0]}`})
-})
+app.get("*", (req, res) => {
+  res.json({
+    status: 404,
+    msg: `Not found route : ${req.params[0]}`,
+  });
+});
 
 app.listen(PORT, () => {
-  console.log(`Listening on http://localhost:${PORT}`);
+  console.log(`Listening on port ${PORT}`);
 });

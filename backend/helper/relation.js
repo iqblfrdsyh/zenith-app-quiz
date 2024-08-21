@@ -21,12 +21,14 @@ Leaderboard.belongsTo(User, {
 
 User.belongsToMany(Achievement, {
   through: UserAchievement,
+  onDelete: "CASCADE",
   foreignKey: "userId",
   as: "achievements",
 });
 
 Achievement.belongsToMany(User, {
   through: UserAchievement,
+  onDelete: "CASCADE",
   foreignKey: "achievementId",
   as: "users",
 });

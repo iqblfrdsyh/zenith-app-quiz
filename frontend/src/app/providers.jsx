@@ -1,14 +1,15 @@
 "use client";
+
 import { NextUIProvider } from "@nextui-org/react";
 import SplashScreen from "@/components/splashscreen";
 import React, { useState, useEffect } from "react";
-import MenuBar from "@/components/layouts/menu";
 import { usePathname } from "next/navigation";
+import { AdminLayout, UserLayout } from "@/components/layouts";
+import MenuBar from "@/components/menu";
 
 export default function Providers({ children }) {
   const [showSplashScreen, setShowSplashScreen] = useState(false);
-  const router = usePathname();
-  const pathname = router;
+  const pathname = usePathname();
 
   useEffect(() => {
     const splashScreenShown = localStorage.getItem("splashScreenShown");
@@ -17,9 +18,8 @@ export default function Providers({ children }) {
     }
   }, []);
 
-  const hiddenMenu = [].includes(pathname); //tambahkan pathname nya ke array jika tidak ingin dimunculkan menu
-
-  console.log({ pathname, hiddenMenu });
+  const isAdminRoute = pathname.includes("admin");
+  const isHiddenMenu = [].includes(pathname) || isAdminRoute;
 
   return (
     <NextUIProvider>
@@ -27,10 +27,12 @@ export default function Providers({ children }) {
         <SplashScreen setShowSplashScreen={setShowSplashScreen} />
       ) : (
         <>
-          {!hiddenMenu && (
-            <MenuBar />
+          {!isAdminRoute && !isHiddenMenu && <MenuBar />}
+          {isAdminRoute ? (
+            <AdminLayout>{children}</AdminLayout>
+          ) : (
+            <UserLayout>{children}</UserLayout>
           )}
-          <main className="relative">{children}</main>
         </>
       )}
     </NextUIProvider>
