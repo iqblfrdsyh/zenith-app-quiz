@@ -1,4 +1,4 @@
-import { Card, CardBody } from "@nextui-org/react";
+import CategoryCard from "./categoryCard";
 
 const Cards = {
   CardAchievement: () => {
@@ -7,15 +7,7 @@ const Cards = {
   CardRecent: () => {
     return <div>card recent</div>;
   },
-  CardCategory: () => {
-    return (
-      <Card className="mt-6 w-96">
-        <CardBody>
-          <h1>Test</h1>
-        </CardBody>
-      </Card>
-    );
-  },
+  CardCategory: CategoryCard,
 };
 
 export { Cards };

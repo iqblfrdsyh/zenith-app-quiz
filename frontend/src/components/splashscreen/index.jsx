@@ -5,6 +5,7 @@ const SplashScreen = ({ setShowSplashScreen }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSplashScreen(false);
+      localStorage.setItem("splashScreenShown", true);
     }, 1500);
 
     return () => clearTimeout(timer);

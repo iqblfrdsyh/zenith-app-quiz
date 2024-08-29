@@ -25,6 +25,9 @@ module.exports = {
       points: {
         type: Sequelize.INTEGER,
       },
+      role: {
+        type: Sequelize.ENUM("admin", "user"),
+      },
       refreshToken: {
         type: Sequelize.TEXT,
       },

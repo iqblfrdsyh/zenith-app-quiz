@@ -21,12 +21,13 @@ module.exports = (sequelize, DataTypes) => {
       fullname: DataTypes.STRING,
       username: {
         type: DataTypes.STRING,
-        unique: true
+        unique: true,
       },
       password: DataTypes.TEXT,
       achievement: DataTypes.INTEGER,
       points: DataTypes.INTEGER,
-      refreshToken: DataTypes.TEXT
+      role: DataTypes.ENUM("admin", "user"),
+      refreshToken: DataTypes.TEXT,
     },
     {
       sequelize,

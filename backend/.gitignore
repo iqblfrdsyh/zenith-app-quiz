@@ -1,2 +1,5 @@
 node_modules
 .env
+.env.*
+
+npx sequelize-cli model:generate --name quiz --attributes topic:string,question:text,option1:string,option2:string,option3:string,option4:string,correct_answer:string

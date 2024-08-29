@@ -2,17 +2,38 @@
 
 import { NextUIProvider } from "@nextui-org/react";
 import SplashScreen from "@/components/splashscreen";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { AdminLayout, UserLayout } from "@/components/layouts";
+import MenuBar from "@/components/menu";
 
 export default function Providers({ children }) {
-  const [showSplashScreen, setShowSplashScreen] = useState(true);
+  const [showSplashScreen, setShowSplashScreen] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const splashScreenShown = localStorage.getItem("splashScreenShown");
+    if (!splashScreenShown) {
+      setShowSplashScreen(true);
+    }
+  }, []);
+
+  const isAdminRoute = pathname.includes("admin");
+  const isHiddenMenu = [].includes(pathname) || isAdminRoute;
 
   return (
     <NextUIProvider>
       {showSplashScreen ? (
         <SplashScreen setShowSplashScreen={setShowSplashScreen} />
       ) : (
-        <main>{children}</main>
+        <>
+          {!isAdminRoute && !isHiddenMenu && <MenuBar /> }
+          {isAdminRoute ? (
+            <AdminLayout>{children}</AdminLayout>
+          ) : (
+            <UserLayout>{children}</UserLayout>
+          )}
+        </>
       )}
     </NextUIProvider>
   );

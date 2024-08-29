@@ -33,6 +33,7 @@ exports.CheckAndAddAchievements = async (userId) => {
         });
       }
     }
+    
 
     if (achievementsToAdd.length) {
       await UserAchievement.bulkCreate(achievementsToAdd);
@@ -81,7 +82,7 @@ exports.createAchievement = async (req, res) => {
     ) {
       return res
         .status(400)
-        .json({ status: 400, msg: "All fields are required" });
+        .json({ status: 400, msg: "Can't be just whitespace" });
     }
 
     const achievementData = await Achievement.findAll({
@@ -106,12 +107,10 @@ exports.createAchievement = async (req, res) => {
     const validLevel = ["Beginner", "Intermediate", "Advanced", "Expert"];
 
     if (!validLevel.find((levels) => levels == level)) {
-      return res
-        .status(400)
-        .json({
-          status: 400,
-          msg: "Invalid level. Please select one of the following: Beginner, Intermediate, Advanced, Expert.",
-        });
+      return res.status(400).json({
+        status: 400,
+        msg: "Invalid level. Please select one of the following: Beginner, Intermediate, Advanced, Expert.",
+      });
     }
 
     const newAchievement = await Achievement.create({
@@ -127,5 +126,34 @@ exports.createAchievement = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({ status: 500, msg: error.message });
+  }
+};
+
+exports.deleteAchievement = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const achievement = await Achievement.findByPk(id);
+
+    if (!achievement) {
+      return res.status(404).json({
+        status: 404,
+        msg: "Achievement tidak ditemukan",
+      });
+    }
+
+    await UserAchievement.destroy({ where: { achievementId: id } });
+
+    await achievement.destroy();
+
+    return res.status(200).json({
+      status: 200,
+      msg: "Achievement deleted successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      msg: error.message,
+    });
   }
 };

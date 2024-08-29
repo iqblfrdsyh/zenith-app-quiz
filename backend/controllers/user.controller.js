@@ -45,18 +45,12 @@ exports.updateUser = async (req, res) => {
     const { userId } = req.query;
     const { points } = req.body;
 
-    const UserAchievements = await UserAchievement.findAll({
-      where: { userId },
-    });
-
     const user = await User.findByPk(userId);
-
 
     user.points += parseInt(points || 0);
     await user.save();
 
     const achievementResult = await CheckAndAddAchievements(userId);
-
 
     const totalAchievements = await UserAchievement.count({
       where: { userId },
@@ -80,7 +74,7 @@ exports.updateUser = async (req, res) => {
 
 exports.signup = async (req, res) => {
   try {
-    const { fullname, username, password, confirmPassword } = req.body;
+    const { fullname, username, password, confirmPassword, role } = req.body;
 
     if (
       trimmedValue(fullname) ||
@@ -123,6 +117,7 @@ exports.signup = async (req, res) => {
       password: hashedPassword,
       achievement: 0,
       points: 0,
+      role: role || "user",
     });
 
     res.status(201).json({ status: 201, msg: "New user created" });
@@ -163,6 +158,7 @@ exports.signin = async (req, res) => {
     const uname = user[0].username;
     const achievement = user[0].achievement;
     const points = user[0].points;
+    const role = user[0].role;
 
     const accessToken = jwt.sign(
       { userId, uname },
@@ -192,7 +188,8 @@ exports.signin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    req.user = { userId, fullname, username: uname, achievement, points };
+    req.user = { userId, fullname, username: uname, achievement, points, role };
+    req.user = { userId, fullname, username: uname, achievement, points, role };
 
     res.json({ accessToken });
   } catch (error) {
@@ -233,7 +230,14 @@ exports.isLogin = async (req, res) => {
       where: {
         id: userId,
       },
-      attributes: ["id", "fullname", "username", "achievement", "points"],
+      attributes: [
+        "id",
+        "fullname",
+        "username",
+        "achievement",
+        "points",
+        "role",
+      ],
     });
 
     if (!user) {

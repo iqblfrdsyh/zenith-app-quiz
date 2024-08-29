@@ -8,6 +8,14 @@ const UserAchievement = require("../models/userachievement.js")(
   sequelize,
   DataTypes
 );
+const Quiz = require("../models/quiz.js")(sequelize, DataTypes);
+const Topic = require("../models/topic.js")(sequelize, DataTypes);
+const Category = require("../models/category.js")(sequelize, DataTypes);
+const CategoryTopic = require("../models/categorytopic.js")(
+  sequelize,
+  DataTypes
+);
+const TotalData = require("../models/totaldata.js")(sequelize, DataTypes);
 
 User.hasMany(Leaderboard, {
   foreignKey: "userId",
@@ -21,14 +29,50 @@ Leaderboard.belongsTo(User, {
 
 User.belongsToMany(Achievement, {
   through: UserAchievement,
+  onDelete: "CASCADE",
   foreignKey: "userId",
   as: "achievements",
 });
 
 Achievement.belongsToMany(User, {
   through: UserAchievement,
+  onDelete: "CASCADE",
   foreignKey: "achievementId",
   as: "users",
 });
 
-module.exports = { User, Leaderboard, Achievement, UserAchievement };
+Category.belongsToMany(Topic, {
+  through: CategoryTopic,
+  onDelete: "CASCADE",
+  foreignKey: "categoryId",
+  as: "topics",
+});
+
+Topic.belongsToMany(Category, {
+  through: CategoryTopic,
+  onDelete: "CASCADE",
+  foreignKey: "topicId",
+  as: "categories",
+});
+
+Topic.hasMany(Quiz, {
+  foreignKey: "topicId",
+  as: "quizzes",
+});
+
+Quiz.belongsTo(Topic, {
+  foreignKey: "topicId",
+  as: "topic",
+});
+
+module.exports = {
+  User,
+  Leaderboard,
+  Achievement,
+  UserAchievement,
+  Quiz,
+  Topic,
+  Category,
+  CategoryTopic,
+  TotalData,
+};
