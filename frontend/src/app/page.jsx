@@ -24,7 +24,6 @@ const Home = () => {
         <SlideCard.Category />
         <SlideCard.Popular />
         <SlideCard.Recent />
-
       </div>
     </div>
   );
