@@ -51,22 +51,22 @@ const Charts = () => {
     },
   ];
 
+  const fetchData = async () => {
+    try {
+      const response = await getAllData("totalData");
+      setData({
+        quizzes: response.data[0].quizzes,
+        categories: response.data[0].category,
+        topics: response.data[0].topics,
+        users: response.data[0].users,
+        achievements: response.data[0].achievements,
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllData("totalData");
-        setData({
-          quizzes: response.data[0].quizzes,
-          categories: response.data[0].category,
-          topics: response.data[0].topics,
-          users: response.data[0].users,
-          achievements: response.data[0].achievements,
-        });
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -105,7 +105,10 @@ const Charts = () => {
     <React.Fragment>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4  sm:gap-6 md:gap-8">
         {datas.map((x, i) => (
-          <div className="bg-white p-4 sm:p-6 rounded-lg shadow z-10" key={i + 1}>
+          <div
+            className="bg-white p-4 sm:p-6 rounded-lg shadow z-10"
+            key={i + 1}
+          >
             <h2 className="text-base sm:text-lg md:text-xl font-semibold">
               {x.title}
             </h2>
