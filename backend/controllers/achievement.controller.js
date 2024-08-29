@@ -33,6 +33,7 @@ exports.CheckAndAddAchievements = async (userId) => {
         });
       }
     }
+    
 
     if (achievementsToAdd.length) {
       await UserAchievement.bulkCreate(achievementsToAdd);
@@ -81,7 +82,7 @@ exports.createAchievement = async (req, res) => {
     ) {
       return res
         .status(400)
-        .json({ status: 400, msg: "All fields are required" });
+        .json({ status: 400, msg: "Can't be just whitespace" });
     }
 
     const achievementData = await Achievement.findAll({

@@ -27,7 +27,7 @@ export default function Providers({ children }) {
         <SplashScreen setShowSplashScreen={setShowSplashScreen} />
       ) : (
         <>
-          {!isAdminRoute && !isHiddenMenu && <MenuBar />}
+          {!isAdminRoute && !isHiddenMenu && <MenuBar /> }
           {isAdminRoute ? (
             <AdminLayout>{children}</AdminLayout>
           ) : (

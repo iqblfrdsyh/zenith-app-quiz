@@ -1,9 +1,14 @@
-import React from 'react'
+"use client";
 
-const DashboardAdmin = () => {
+import Charts from "@/components/charts";
+import React from "react";
+
+const Dashboard = () => {
   return (
-    <div>DashboardAdmin</div>
-  )
-}
+    <div>
+      <Charts />
+    </div>
+  );
+};
 
-export default DashboardAdmin
+export default Dashboard;

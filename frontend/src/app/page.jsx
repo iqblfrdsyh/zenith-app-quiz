@@ -2,6 +2,7 @@ import { SlideCard } from "@/components/slide";
 import { Button } from "@nextui-org/react";
 
 const Home = () => {
+  
   return (
     <div className="w-full h-full p-3 bg-gradient-to-b from-white to-teal-200 relative">
       <div className="flex flex-col px-3">
@@ -14,7 +15,9 @@ const Home = () => {
             <h1 className="text-white w-40 text-[14px] font-semibold ps-4 pb-2">
               Join and play to get a wider knowledge insight!
             </h1>
-            <Button className="bg-white ms-4 w-20 text-[10px] rounded-md h-6 font-semibold text-teal-600">Get Started</Button>
+            <Button className="bg-white ms-4 w-20 text-[10px] rounded-md h-6 font-semibold text-teal-600">
+              Get Started
+            </Button>
           </div>
           <img src="images/header.png" className="w-44 h-24 -ms-5" />
         </div>
