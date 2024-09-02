@@ -29,12 +29,12 @@ export function AdminLayout({ children }) {
       {!isHiddenSidebar && <SidebarAdmin menuItems={menuItems} />}
 
       <main
-        className={`absolute top-10 p-5 overflow-x-hidden md:top-0 ${
-          isHiddenSidebar ? "" : "md:ml-64"
+        className={`absolute top-10 p-5 overflow-x-hidden overflow-y-scroll h-screen md:top-0 w-screen ${
+          isHiddenSidebar ? "" : "md:ml-64 md:w-[82%]"
         }`}
       >
         {!isHiddenSidebar && (
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold p-5 hidden md:block">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold p-3 hidden md:block">
             {activeTitle}
           </h1>
         )}

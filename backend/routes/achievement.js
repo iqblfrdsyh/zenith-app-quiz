@@ -8,7 +8,7 @@ const {
 } = require("../controllers/achievement.controller");
 
 router.get("/achievements", getAllAchievements);
-router.delete("/achievement/delete/:id", deleteAchievement);
+router.delete("/achievement/delete", deleteAchievement);
 router.post("/achievement/create", createAchievement);
 
 module.exports = router;

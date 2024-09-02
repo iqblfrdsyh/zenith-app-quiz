@@ -3,12 +3,29 @@ const { Topic, Category, CategoryTopic } = require("../helper/relation");
 
 exports.getAllTopic = async (req, res) => {
   try {
-    const datas = await Topic.findAll();
+    const datas = await Topic.findAll({
+      include: [
+        {
+          model: Category,
+          through: { attributes: [] },
+          attributes: ["id", "title"],
+          as: "categories",
+        },
+      ],
+    });
+
     if (!datas.length) {
       return res.status(404).json({ msg: "Not found data" });
     }
 
-    return res.status(200).json({ status: 200, total: datas.length, datas });
+    const modifiedTopics = datas.map((topic) => ({
+      ...topic.toJSON(),
+      categories: topic.categories.map((category) => category.title)[0],
+    }));
+
+    return res
+      .status(200)
+      .json({ status: 200, total: datas.length, datas: modifiedTopics });
   } catch (error) {
     return res.status(500).json({ status: 500, msg: error.message });
   }
