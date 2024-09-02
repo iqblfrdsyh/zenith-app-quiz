@@ -131,7 +131,7 @@ exports.createAchievement = async (req, res) => {
 
 exports.deleteAchievement = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.query;
 
     const achievement = await Achievement.findByPk(id);
 
