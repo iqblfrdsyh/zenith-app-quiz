@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
 import { Button } from "@nextui-org/react";
 import React from "react";
 import Swal from "sweetalert2";
 
-const Popup = ({
+const ButtonPopup = ({
   children,
   title,
   text,
@@ -31,7 +31,7 @@ const Popup = ({
     });
   };
 
-  return <div onClick={showPopup}>{children}</div>;
+  return <button onClick={showPopup}>{children}</button>;
 };
 
-export default Popup;
+export default ButtonPopup;

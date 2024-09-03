@@ -1,4 +1,4 @@
-const { trimmedValue } = require("../helper/functions");
+const { trimmedValue, formatTitle } = require("../helper/functions");
 const { Topic, Category, CategoryTopic } = require("../helper/relation");
 
 exports.getAllTopic = async (req, res) => {
@@ -20,7 +20,7 @@ exports.getAllTopic = async (req, res) => {
 
     const modifiedTopics = datas.map((topic) => ({
       ...topic.toJSON(),
-      categories: topic.categories.map((category) => category.title)[0],
+      category: topic.categories.map((category) => category.title)[0],
     }));
 
     return res
@@ -45,7 +45,7 @@ exports.createTopic = async (req, res) => {
     );
 
     if (ExistingTopics.includes(title.toLowerCase())) {
-      return res.status(400).json({ status: 400, msg: "Data already exists" });
+      return res.status(409).json({ status: 409, msg: "Data already exists" });
     }
 
     const category = await Category.findByPk(categoryId);
@@ -53,13 +53,19 @@ exports.createTopic = async (req, res) => {
       return res.status(404).json({ status: 404, msg: "Category not found" });
     }
 
-    const newTopic = await Topic.create({ title });
+    const newTopic = await Topic.create({ title: formatTitle(title) });
 
     await CategoryTopic.create({ categoryId, topicId: newTopic.id });
 
-    return res
-      .status(201)
-      .json({ status: 201, msg: "Topic created", data: newTopic });
+    return res.status(201).json({
+      status: 201,
+      msg: "Topic created",
+      data: {
+        id: newTopic.id,
+        title: newTopic.title,
+        category: category.title,
+      },
+    });
   } catch (error) {
     return res.status(500).json({ status: 500, msg: error.message });
   }

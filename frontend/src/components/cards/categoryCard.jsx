@@ -2,12 +2,15 @@
 
 import { Card, CardBody, Image } from "@nextui-org/react";
 
-const CategoryCard = ({ image, title, isHots }) => {
+const CategoryCard = ({ onClick, image, title, isHots }) => {
   const preventDefaultBehavior = (e) => {
     e.preventDefault();
   };
   return (
-    <Card className="mt-6 w-[135px] h-[115px] shadow-sm relative">
+    <Card
+      className="mt-6 w-[135px] h-[115px] shadow-sm relative"
+      onClick={onClick}
+    >
       <CardBody className="flex flex-col justify-center items-center">
         {isHots && (
           <div className="absolute top-0 left-0 w-[50px]">

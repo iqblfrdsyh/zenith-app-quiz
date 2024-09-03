@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { trimmedValue } = require("../helper/functions");
+const { trimmedValue, formatTitle } = require("../helper/functions");
 const { Category } = require("../helper/relation");
 
 exports.getAllCategory = async (req, res) => {
@@ -46,11 +46,10 @@ exports.createCategory = async (req, res) => {
         .json({ status: 409, msg: "Category already exists" });
     }
 
-    const formatTitle =
-      title.charAt(0).toUpperCase() + title.slice(1).toLowerCase();
+   
 
     const newCategory = await Category.create({
-      title: formatTitle,
+      title: formatTitle(title),
       isHots: isHots || false,
     });
 

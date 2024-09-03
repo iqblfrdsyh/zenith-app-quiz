@@ -7,7 +7,7 @@ const menuItems = [
   { href: "/admin/quiz", label: "Quiz" },
   { href: "/admin/category", label: "Category" },
   { href: "/admin/topic", label: "Topic" },
-  { href: "/admin/leaderboard", label: "Leaderboard" },
+  { href: "/admin/achievement", label: "Achievement" },
   { href: "/admin/users", label: "Users" },
 ];
 

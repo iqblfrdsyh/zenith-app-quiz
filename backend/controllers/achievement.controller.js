@@ -92,8 +92,8 @@ exports.createAchievement = async (req, res) => {
     });
 
     if (achievementData.length > 0) {
-      return res.status(400).json({
-        status: 400,
+      return res.status(409).json({
+        status: 409,
         msg: "An achievement with the same title or required points already exists",
       });
     }

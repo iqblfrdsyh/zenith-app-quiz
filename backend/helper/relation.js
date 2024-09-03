@@ -44,14 +44,12 @@ Achievement.belongsToMany(User, {
 Category.belongsToMany(Topic, {
   through: CategoryTopic,
   onDelete: "CASCADE",
-  foreignKey: "categoryId",
   as: "topics",
 });
 
 Topic.belongsToMany(Category, {
   through: CategoryTopic,
   onDelete: "CASCADE",
-  foreignKey: "topicId",
   as: "categories",
 });
 

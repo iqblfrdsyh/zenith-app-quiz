@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import { Image } from "@nextui-org/react";
-import Popup from "@/components/popup";
 import { Cards } from "@/components/cards";
 import { getAllData } from "@/libs/api-libs";
+import ButtonPopup from "@/components/buttonPupup";
 
 const imageMapping = {
   Math: "./images/icons/math.svg",
@@ -14,7 +14,7 @@ const imageMapping = {
   Art: "./images/icons/art&culture.svg",
   Geography: "./images/icons/geography.svg",
   Sport: "./images/icons/sport.svg",
-  Technology: "./images/icons/technology.svg",
+  Tech: "./images/icons/technology.svg",
 };
 
 const Category = () => {
@@ -24,7 +24,7 @@ const Category = () => {
     const fetchCategories = async () => {
       try {
         const response = await getAllData("categories");
-        setCategories(response.datas);
+        setCategories(response?.datas);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -59,8 +59,8 @@ const Category = () => {
             />
           </div>
           <div className="mt-4 grid grid-cols-2 justify-items-center items-center ">
-            {categories.map((data) => (
-              <Popup
+            {categories?.map((data) => (
+              <ButtonPopup
                 key={data.id}
                 title={"Sorry"}
                 icon={"error"}
@@ -73,7 +73,7 @@ const Category = () => {
                   title={data.title}
                   isHots={data.isHots}
                 />
-              </Popup>
+              </ButtonPopup>
             ))}
           </div>
         </div>

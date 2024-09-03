@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { Forms } from "@/components/form";
 import { Tables } from "@/components/table";
-import { createCategory, getAllData, updateCategory } from "@/libs/api-libs";
+import { create, getAllData, update } from "@/libs/api-libs";
+import Swal from "sweetalert2";
 
 const ManageCategory = () => {
   const [categories, setCategories] = useState([]);
@@ -13,9 +14,14 @@ const ManageCategory = () => {
     const fetchCategories = async () => {
       try {
         const response = await getAllData("categories");
-        setCategories(response.datas);
+        setCategories(response?.datas);
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        Swal.fire({
+          title: "Error!",
+          text: error.message,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       }
     };
 
@@ -28,14 +34,12 @@ const ManageCategory = () => {
 
     try {
       if (id) {
-        const response = await updateCategory("category/update", id, categoryData);
+        const response = await update("category/update", id, categoryData);
         setCategories(
-          categories.map((cat) =>
-            cat.id === id ? response.data : cat
-          )
+          categories.map((cat) => (cat.id === id ? response.data : cat))
         );
       } else {
-        const response = await createCategory("category/create", categoryData);
+        const response = await create("category/create", categoryData);
         setCategories([
           ...categories,
           { ...response.data, id: response.data.id },
@@ -43,7 +47,12 @@ const ManageCategory = () => {
       }
       setEditingCategory(null);
     } catch (error) {
-      console.error("Error handling category:", error);
+      Swal.fire({
+        title: "Error!",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 
@@ -63,10 +72,11 @@ const ManageCategory = () => {
         initialData={editingCategory || {}}
         onCancel={handleCancelEdit}
       />
-      <Tables.CategoryTable
-        categories={categories}
-        onEdit={handleEdit}
-      />
+      {!categories?.length ? (
+        <div>Not Found Data Categories</div>
+      ) : (
+        <Tables.CategoryTable categories={categories} onEdit={handleEdit} />
+      )}
     </div>
   );
 };

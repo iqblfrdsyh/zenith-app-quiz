@@ -8,4 +8,8 @@ function isStrongPassword(password) {
   return strongPasswordRegex.test(password);
 }
 
-module.exports = { trimmedValue, isStrongPassword };
+function formatTitle(title) {
+  return title.charAt(0).toUpperCase() + title.slice(1).toLowerCase();
+}
+
+module.exports = { trimmedValue, isStrongPassword ,formatTitle};
