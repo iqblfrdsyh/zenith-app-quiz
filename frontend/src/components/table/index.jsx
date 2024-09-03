@@ -9,6 +9,7 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
+import ButtonPopup from "../buttonPopup";
 
 const Tables = {
   CategoryTable: ({ categories, onEdit }) => {
@@ -97,7 +98,7 @@ const Tables = {
             {topics?.map((topic) => (
               <TableRow key={topic.id}>
                 <TableCell>{topic.title}</TableCell>
-                <TableCell>{topic.category}</TableCell>
+                <TableCell>{topic.categories[0].title}</TableCell>
                 <TableCell>
                   <Button auto color="primary" onClick={() => onEdit(topic.id)}>
                     Edit
@@ -162,6 +163,68 @@ const Tables = {
           </TableBody>
         </Table>
       </div>
+    );
+  },
+  QuizTable: ({ quizzes, onEdit, onDelete, onConfirm }) => {
+    return (
+      <Table
+        aria-label="Quiz Table"
+        bordered
+        shadow={false}
+        selectionMode="none"
+        css={{
+          height: "auto",
+          minWidth: "100%",
+        }}
+      >
+        <TableHeader>
+          <TableColumn>Topic</TableColumn>
+          <TableColumn>Question</TableColumn>
+          <TableColumn>Option 1</TableColumn>
+          <TableColumn>Option 2</TableColumn>
+          <TableColumn>Option 3</TableColumn>
+          <TableColumn>Option 4</TableColumn>
+          <TableColumn>Correct Answer</TableColumn>
+          <TableColumn>Actions</TableColumn>
+        </TableHeader>
+        <TableBody>
+          {quizzes?.map((quiz) => (
+            <TableRow key={quiz.id}>
+              <TableCell>{quiz.topic.title}</TableCell>
+              <TableCell>{quiz.question}</TableCell>
+              <TableCell>{quiz.option1}</TableCell>
+              <TableCell>{quiz.option2}</TableCell>
+              <TableCell>{quiz.option3}</TableCell>
+              <TableCell>{quiz.option4}</TableCell>
+              <TableCell>{quiz.correct_answer}</TableCell>
+              <TableCell className="grid grid-cols-2 gap-2">
+                <Button
+                  flat
+                  auto
+                  color="primary"
+                  onClick={() => onEdit(quiz.id)}
+                >
+                  Edit
+                </Button>
+                <ButtonPopup
+                  title={"Warning!"}
+                  text={"Are you sure to delete this quiz?"}
+                  icon={"warning"}
+                  onConfirm={() => onDelete(quiz.id)}
+                  confirmButtonText={"Delete"}
+                  cancelButtonText={"Cancel"}
+                  confirmButtonColor={"red"}
+                  flat
+                  auto
+                  color="danger"
+                >
+                  Delete
+                </ButtonPopup>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     );
   },
 };

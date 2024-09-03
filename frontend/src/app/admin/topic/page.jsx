@@ -43,15 +43,15 @@ const ManageTopic = () => {
     try {
       if (id) {
         const response = await update("topic/update", id, topicData);
-        setTopics(topics.map((t) => (t.id === id ? response.data : t)));
+        setTopics(topics.map((t) => (t.id === id ? response.datas : t)));
       } else {
         const response = await create("topic/create", topicData);
 
         setTopics((prevTopics) => [
           ...prevTopics,
           {
-            ...response?.data,
-            id: response?.data.id,
+            ...response?.datas,
+            id: response?.datas.id,
           },
         ]);
       }
@@ -68,7 +68,17 @@ const ManageTopic = () => {
 
   const handleEdit = (topicId) => {
     const topic = topics.find((t) => t.id === topicId);
-    setEditingTopic(topic);
+
+    const categoryId =
+      topic.categories.length > 0 ? topic.categories[0].id : null;
+
+    const updatedTopic = {
+      id: topic.id,
+      title: topic.title,
+      categoryId: categoryId.toString(),
+    };
+
+    setEditingTopic(updatedTopic);
   };
 
   const handleCancelEdit = () => {

@@ -42,13 +42,13 @@ const ManageAch = () => {
           achievementData
         );
         setAchievements(
-          achievements.map((a) => (a.id === id ? response.data : a))
+          achievements.map((a) => (a.id === id ? response.datas : a))
         );
       } else {
         const response = await create("achievement/create", achievementData);
         setAchievements([
           ...achievements,
-          { ...response.data, id: response.data.id },
+          { ...response.datas, id: response.datas.id },
         ]);
       }
       setEditingAchievement(null);

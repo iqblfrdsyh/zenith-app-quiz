@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
 import InputField from "@/components/inputField";
+import React, { useState } from "react";
 
 const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);

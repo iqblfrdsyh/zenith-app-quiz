@@ -18,14 +18,7 @@ exports.getAllTopic = async (req, res) => {
       return res.status(404).json({ msg: "Not found data" });
     }
 
-    const modifiedTopics = datas.map((topic) => ({
-      ...topic.toJSON(),
-      category: topic.categories.map((category) => category.title)[0],
-    }));
-
-    return res
-      .status(200)
-      .json({ status: 200, total: datas.length, datas: modifiedTopics });
+    return res.status(200).json({ status: 200, total: datas.length, datas });
   } catch (error) {
     return res.status(500).json({ status: 500, msg: error.message });
   }
@@ -57,14 +50,90 @@ exports.createTopic = async (req, res) => {
 
     await CategoryTopic.create({ categoryId, topicId: newTopic.id });
 
+    const createdTopic = await Topic.findByPk(newTopic.id, {
+      include: [
+        {
+          model: Category,
+          through: { attributes: [] },
+          attributes: ["id", "title"],
+          as: "categories",
+        },
+      ],
+    });
+
+    const formattedTopic = {
+      id: createdTopic.id,
+      title: createdTopic.title,
+      categories: createdTopic.categories,
+    };
+
     return res.status(201).json({
       status: 201,
       msg: "Topic created",
-      data: {
-        id: newTopic.id,
-        title: newTopic.title,
-        category: category.title,
-      },
+      datas: formattedTopic,
+    });
+  } catch (error) {
+    return res.status(500).json({ status: 500, msg: error.message });
+  }
+};
+
+exports.updateTopic = async (req, res) => {
+  try {
+    const { id } = req.query;
+    const { title, categoryId } = req.body;
+
+    const topic = await Topic.findByPk(id, {
+      include: [
+        {
+          model: Category,
+          through: { attributes: [] },
+          attributes: ["id", "title"],
+          as: "categories",
+        },
+      ],
+    });
+
+    if (!topic) {
+      return res.status(404).json({ status: 404, msg: "Topic not found" });
+    }
+
+    const category = await Category.findByPk(categoryId);
+    if (!category) {
+      return res.status(404).json({ status: 404, msg: "Category not found" });
+    }
+
+    await topic.update({ title: formatTitle(title) || topic.title });
+
+    await CategoryTopic.destroy({
+      where: { topicId: id },
+    });
+
+    await CategoryTopic.create({
+      categoryId: categoryId || category.id,
+      topicId: id,
+    });
+
+    const updatedTopic = await Topic.findByPk(id, {
+      include: [
+        {
+          model: Category,
+          through: { attributes: [] },
+          attributes: ["id", "title"],
+          as: "categories",
+        },
+      ],
+    });
+
+    const formatUpdatedTopic = {
+      id: updatedTopic.id,
+      title: updatedTopic.title,
+      categories: updatedTopic.categories,
+    };
+
+    return res.status(200).json({
+      status: 200,
+      msg: "Topic updated",
+      datas: formatUpdatedTopic,
     });
   } catch (error) {
     return res.status(500).json({ status: 500, msg: error.message });

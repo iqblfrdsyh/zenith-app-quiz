@@ -36,13 +36,13 @@ const ManageCategory = () => {
       if (id) {
         const response = await update("category/update", id, categoryData);
         setCategories(
-          categories.map((cat) => (cat.id === id ? response.data : cat))
+          categories.map((cat) => (cat.id === id ? response.datas : cat))
         );
       } else {
         const response = await create("category/create", categoryData);
         setCategories([
           ...categories,
-          { ...response.data, id: response.data.id },
+          { ...response.datas, id: response.datas.id },
         ]);
       }
       setEditingCategory(null);

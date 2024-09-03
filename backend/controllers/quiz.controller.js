@@ -3,13 +3,35 @@ const { Quiz, Topic } = require("../helper/relation");
 
 exports.getAllQuizzes = async (req, res) => {
   try {
-    const quizzes = await Quiz.findAll();
+    const quizzes = await Quiz.findAll({
+      include: {
+        model: Topic,
+        attributes: ["id", "title"],
+        as: "topic",
+      },
+    });
+
     if (quizzes.length === 0) {
       return res.status(404).json({ status: 404, msg: "No quizzes found" });
     }
+
+    const formattedQuizzes = quizzes.map((quiz) => ({
+      id: quiz.id,
+      question: quiz.question,
+      option1: quiz.option1,
+      option2: quiz.option2,
+      option3: quiz.option3,
+      option4: quiz.option4,
+      correct_answer: quiz.correct_answer,
+      topic: {
+        id: quiz.topic.id,
+        title: quiz.topic.title,
+      },
+    }));
+
     return res
       .status(200)
-      .json({ status: 200, total: quizzes.length, data: quizzes });
+      .json({ status: 200, total: quizzes.length, datas: formattedQuizzes });
   } catch (error) {
     return res.status(500).json({ status: 500, msg: error.message });
   }
@@ -18,11 +40,31 @@ exports.getAllQuizzes = async (req, res) => {
 exports.getQuizById = async (req, res) => {
   try {
     const { id } = req.query;
-    const quiz = await Quiz.findByPk(id);
+    const quiz = await Quiz.findByPk(id, {
+      include: {
+        model: Topic,
+        attributes: ["title"],
+        as: "topic",
+      },
+    });
+
     if (!quiz) {
       return res.status(404).json({ status: 404, msg: "Quiz not found" });
     }
-    return res.status(200).json({ status: 200, data: quiz });
+
+    return res.status(200).json({
+      status: 200,
+      datas: {
+        id: quiz.id,
+        question: quiz.question,
+        option1: quiz.option1,
+        option2: quiz.option2,
+        option3: quiz.option3,
+        option4: quiz.option4,
+        correct_answer: quiz.correct_answer,
+        topic: quiz.topic.title,
+      },
+    });
   } catch (error) {
     return res.status(500).json({ status: 500, msg: error.message });
   }
@@ -68,9 +110,29 @@ exports.createQuiz = async (req, res) => {
       option4,
       correct_answer,
     });
-    return res
-      .status(201)
-      .json({ status: 201, msg: "Quiz created", data: newQuiz });
+
+    const quizWithTopic = await Quiz.findByPk(newQuiz.id, {
+      include: {
+        model: Topic,
+        attributes: ["title"],
+        as: "topic",
+      },
+    });
+
+    return res.status(201).json({
+      status: 201,
+      msg: "Quiz created",
+      datas: {
+        id: quizWithTopic.id,
+        question: quizWithTopic.question,
+        option1: quizWithTopic.option1,
+        option2: quizWithTopic.option2,
+        option3: quizWithTopic.option3,
+        option4: quizWithTopic.option4,
+        correct_answer: quizWithTopic.correct_answer,
+        topic: quizWithTopic.topic.title,
+      },
+    });
   } catch (error) {
     return res.status(500).json({ status: 500, msg: error.message });
   }
@@ -89,7 +151,14 @@ exports.updateQuiz = async (req, res) => {
       correct_answer,
     } = req.body;
 
-    const quiz = await Quiz.findByPk(id);
+    const quiz = await Quiz.findByPk(id, {
+      include: {
+        model: Topic,
+        attributes: ["id", "title"],
+        as: "topic",
+      },
+    });
+
     if (!quiz) {
       return res.status(404).json({ status: 404, msg: "Quiz not found" });
     }
@@ -110,13 +179,31 @@ exports.updateQuiz = async (req, res) => {
     };
 
     const updatedQuiz = await quiz.update(updateData);
-    return res
-      .status(200)
-      .json({ status: 200, msg: "Quiz updated", data: updatedQuiz });
+
+    const formattedUpdatedQuiz = {
+      id: updatedQuiz.id,
+      question: updatedQuiz.question,
+      option1: updatedQuiz.option1,
+      option2: updatedQuiz.option2,
+      option3: updatedQuiz.option3,
+      option4: updatedQuiz.option4,
+      correct_answer: updatedQuiz.correct_answer,
+      topic: {
+        id: quiz.topic.id,
+        title: quiz.topic.title,
+      },
+    };
+
+    return res.status(200).json({
+      status: 200,
+      msg: "Quiz updated",
+      datas: formattedUpdatedQuiz,
+    });
   } catch (error) {
     return res.status(500).json({ status: 500, msg: error.message });
   }
 };
+
 
 exports.deleteQuiz = async (req, res) => {
   try {

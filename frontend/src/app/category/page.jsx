@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Image } from "@nextui-org/react";
 import { Cards } from "@/components/cards";
 import { getAllData } from "@/libs/api-libs";
-import ButtonPopup from "@/components/buttonPupup";
+import ButtonPopup from "@/components/buttonPopup";
 
 const imageMapping = {
   Math: "./images/icons/math.svg",

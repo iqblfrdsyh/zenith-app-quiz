@@ -35,3 +35,15 @@ export async function update(endpoint, categoryId, datas) {
     throw new Error(errorMessage);
   }
 }
+
+export async function deleteData(endpoint, id) {
+  try {
+    const response = await axios.delete(
+      `${base_url}/api/v1/${endpoint}?id=${id}`
+    );
+    return response.data;
+  } catch (error) {
+    const errorMessage = error.response?.data?.msg || "An error occurred";
+    throw new Error(errorMessage);
+  }
+}

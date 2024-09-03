@@ -13,15 +13,20 @@ const ButtonPopup = ({
   cancelButtonText,
   onConfirm,
   onCancel,
+  confirmButtonColor,
+  cancelButtonColor,
+  ...propsButton
 }) => {
   const showPopup = () => {
     Swal.fire({
       title: title || "Alert",
       text: text || "",
       icon: icon || "info",
-      confirmButtonText: confirmButtonText || "OK",
       cancelButtonText: cancelButtonText || "Cancel",
+      confirmButtonText: confirmButtonText || "OK",
       showCancelButton: !!cancelButtonText,
+      confirmButtonColor: confirmButtonColor || "",
+      cancelButtonColor: cancelButtonColor || "",
     }).then((result) => {
       if (result.isConfirmed) {
         if (onConfirm) onConfirm();
@@ -31,7 +36,11 @@ const ButtonPopup = ({
     });
   };
 
-  return <button onClick={showPopup}>{children}</button>;
+  return (
+    <Button onClick={showPopup} {...propsButton}>
+      {children}
+    </Button>
+  );
 };
 
 export default ButtonPopup;
