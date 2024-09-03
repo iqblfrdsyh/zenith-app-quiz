@@ -83,11 +83,7 @@ const ManageTopic = () => {
         categories={categories}
         onCancel={handleCancelEdit}
       />
-      {!topics?.length ? (
-        <div>Not Found Data Topic.</div>
-      ) : (
-        <Tables.TopicTable topics={topics} onEdit={handleEdit} />
-      )}
+      <Tables.TopicTable topics={topics} onEdit={handleEdit} />
     </div>
   );
 };

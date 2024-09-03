@@ -1,4 +1,4 @@
-import { Checkbox, Input, Select, SelectItem } from "@nextui-org/react";
+import { Checkbox, Input, Select, SelectItem, Button } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 
 const Forms = {
@@ -44,20 +44,13 @@ const Forms = {
           </Checkbox>
         </div>
         <div className="flex space-x-2">
-          <button
-            type="submit"
-            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-          >
+          <Button type="submit" color="success" auto>
             {initialData.id ? "Update" : "Add"} Category
-          </button>
+          </Button>
           {initialData.id && (
-            <button
-              type="button"
-              onClick={onCancel}
-              className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
-            >
+            <Button type="button" color="warning" auto onClick={onCancel}>
               Cancel
-            </button>
+            </Button>
           )}
         </div>
       </form>
@@ -80,7 +73,7 @@ const Forms = {
         categoryId,
       });
 
-      setCategoryId("")
+      setCategoryId("");
     };
 
     return (
@@ -117,27 +110,120 @@ const Forms = {
             className="mt-1 p-2 block w-full shadow-sm sm:text-sm"
           >
             {categories.map((cat) => (
-              <SelectItem key={cat.id} value={cat.id} >
+              <SelectItem key={cat.id} value={cat.id}>
                 {cat.title}
               </SelectItem>
             ))}
           </Select>
         </div>
         <div className="flex space-x-2">
-          <button
-            type="submit"
-            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-          >
+          <Button type="submit" color="success" auto>
             {initialData.id ? "Update" : "Add"} Topic
-          </button>
+          </Button>
           {initialData.id && (
-            <button
-              type="button"
-              onClick={onCancel}
-              className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
-            >
+            <Button type="button" color="warning" auto onClick={onCancel}>
               Cancel
-            </button>
+            </Button>
+          )}
+        </div>
+      </form>
+    );
+  },
+  AchievementForm: ({ onSubmit, initialData = {}, onCancel }) => {
+    const [title, setTitle] = useState(initialData.title || "");
+    const [requiredPoints, setRequiredPoints] = useState(
+      initialData.required_points || 0
+    );
+    const [level, setLevel] = useState(initialData.level || "");
+
+    useEffect(() => {
+      setTitle(initialData.title || "");
+      setRequiredPoints(initialData.required_points || 0);
+      setLevel(initialData.level || "");
+    }, [initialData]);
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      onSubmit({
+        id: initialData.id,
+        title,
+        required_points: parseInt(requiredPoints),
+        level,
+      });
+    };
+
+    return (
+      <form onSubmit={handleSubmit} className="mb-6 space-y-4">
+        <div>
+          <label
+            htmlFor="achievementTitle"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Achievement Title
+          </label>
+          <Input
+            type="text"
+            id="achievementTitle"
+            label="Achievement Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            isRequired
+            size="sm"
+            className="mt-1 p-2 block w-full shadow-sm sm:text-sm"
+          />
+          <label
+            htmlFor="requiredPoints"
+            className="block text-sm font-medium text-gray-700 mt-2"
+          >
+            Required Points
+          </label>
+          <Input
+            type="number"
+            id="requiredPoints"
+            label="Required Points"
+            value={requiredPoints}
+            onChange={(e) => setRequiredPoints(e.target.value)}
+            isRequired
+            size="sm"
+            className="mt-1 p-2 block w-full shadow-sm sm:text-sm"
+          />
+          <label
+            htmlFor="level"
+            className="block text-sm font-medium text-gray-700 mt-2"
+          >
+            Level
+          </label>
+          <Select
+            id="level"
+            label="Level"
+            onChange={(e) => setLevel(e.target.value)}
+            size="sm"
+            selectedKeys={[level]}
+            isRequired
+            className="mt-1 p-2 block w-full shadow-sm sm:text-sm"
+          >
+            <SelectItem key="Beginner" value="Beginner">
+              Beginner
+            </SelectItem>
+            <SelectItem key="Intermediate" value="Intermediate">
+              Intermediate
+            </SelectItem>
+            <SelectItem key="Advanced" value="Advanced">
+              Advanced
+            </SelectItem>
+            <SelectItem key="Expert" value="Expert">
+              Expert
+            </SelectItem>
+          </Select>
+        </div>
+        <div className="flex space-x-2">
+          <Button type="submit" color="success" auto>
+            {initialData.id ? "Update" : "Add"} Achievement
+          </Button>
+          {initialData.id && (
+            <Button type="button" color="warning" auto onClick={onCancel}>
+              Cancel
+            </Button>
           )}
         </div>
       </form>

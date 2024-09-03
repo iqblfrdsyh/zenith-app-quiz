@@ -72,11 +72,7 @@ const ManageCategory = () => {
         initialData={editingCategory || {}}
         onCancel={handleCancelEdit}
       />
-      {!categories?.length ? (
-        <div>Not Found Data Categories</div>
-      ) : (
-        <Tables.CategoryTable categories={categories} onEdit={handleEdit} />
-      )}
+      <Tables.CategoryTable categories={categories} onEdit={handleEdit} />
     </div>
   );
 };
