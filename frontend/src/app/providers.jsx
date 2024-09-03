@@ -19,7 +19,7 @@ export default function Providers({ children }) {
   }, []);
 
   const isAdminRoute = pathname.includes("admin");
-  const isHiddenMenu = [].includes(pathname) || isAdminRoute;
+  const isHiddenMenu = ["/auth"].includes(pathname) || isAdminRoute;
 
   return (
     <NextUIProvider>

@@ -1,51 +1,47 @@
 "use client";
-import React, { useState } from "react";
 
-const Page = () => {
+import React, { useState } from "react";
+import InputField from "@/components/inputField";
+
+const AuthPage = () => {
   const [isSignIn, setIsSignIn] = useState(true);
 
   const signInFields = [
     {
-      title: "username",
+      name: "username",
       image: "user.png",
       placeholder: "Username",
+      type: "text",
     },
     {
-      title: "password",
+      name: "password",
       image: "password.png",
       placeholder: "Password",
+      type: "password",
     },
   ];
 
   const signUpFields = [
     {
-      title: "fullname",
+      name: "fullname",
       image: "user.png",
       placeholder: "Fullname",
+      type: "text",
     },
+    ...signInFields,
     {
-      title: "username",
-      image: "user.png",
-      placeholder: "Username",
-    },
-    {
-      title: "password",
-      image: "password.png",
-      placeholder: "Password",
-    },
-    {
-      title: "confirm password",
+      name: "confirm-password",
       image: "password.png",
       placeholder: "Confirm Password",
+      type: "password",
     },
   ];
 
   const renderFields = isSignIn ? signInFields : signUpFields;
 
   return (
-    <section className="bg-teal-500">
-      <div className="bg-teal-500 w-full min-h-screen"></div>
-      <div className="sticky bottom-0 left-0 right-0 w-full bg-teal-50/75 px-12 py-4 rounded-t-3xl min-h-[40vh] font-normal transition-all duration-500 ease-in-out transform">
+    <section className="bg-teal-500 min-h-screen flex flex-col justify-end">
+      <div className="sticky bottom-0 left-0 right-0 w-full bg-teal-50/75 px-12 py-4 rounded-t-3xl min-h-[40vh] font-normal transition-all duration-500 ease-in-out">
         <div className="flex justify-center items-center font-bold my-6">
           <button
             onClick={() => setIsSignIn(true)}
@@ -69,49 +65,41 @@ const Page = () => {
           </button>
         </div>
 
-        <div className="flex flex-col justify-center items-center mt-14 space-y-6 transition-opacity duration-500 ease-in-out opacity-100">
-          {renderFields.map((item, index) => (
-            <div
+        <form className="flex flex-col justify-center items-center mt-14 space-y-6">
+          {renderFields.map((field, index) => (
+            <InputField
               key={index}
-              className="relative z-0 w-full group transition-transform transform duration-500"
-            >
-              <img
-                src={`/images/sign/${item.image}`}
-                className="absolute left-4 top-3.5"
-                alt={item.title}
-              />
-              <input
-                type={item.title.includes("password") ? "password" : "text"}
-                name={item.title}
-                id={item.title}
-                className="block pt-3 pb-2.5 pl-12 pr-4 w-full bg-white/90 text-gray-900 outline-teal-500 rounded-lg font-semibold h-12"
-                placeholder={item.placeholder}
-              />
-            </div>
+              type={field.type}
+              name={field.name}
+              placeholder={field.placeholder}
+              image={field.image}
+            />
           ))}
-        </div>
 
-        <div className="my-6 space-y-8">
-          {isSignIn && (
-            <a href="/" className="text-teal-500 font-semibold text-sm">
-              Forgot Password?
-            </a>
-          )}
-
-          <button className="bg-teal-500 w-full text-center rounded-full py-3 text-white/90 font-semibold">
-            {isSignIn ? "Sign In" : "Sign Up"}
-          </button>
-
-          <button
-            onClick={() => setIsSignIn(!isSignIn)}
-            className="w-full text-center rounded-full py-2 text-teal-500 font-semibold"
-          >
-            {isSignIn ? "Don't have an account?" : "Already have an account?"}
-          </button>
-        </div>
+          <div className="my-6 space-y-8 w-full">
+            {isSignIn && (
+              <a href="/" className="text-teal-500 font-semibold text-sm">
+                Forgot Password?
+              </a>
+            )}
+            <button
+              type="submit"
+              className="bg-teal-500 w-full text-center rounded-full py-3 text-white/90 font-semibold"
+            >
+              {isSignIn ? "Sign In" : "Sign Up"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsSignIn(!isSignIn)}
+              className="w-full text-center rounded-full py-2 text-teal-500 font-semibold"
+            >
+              {isSignIn ? "Don't have an account?" : "Already have an account?"}
+            </button>
+          </div>
+        </form>
       </div>
     </section>
   );
 };
 
-export default Page;
+export default AuthPage;
