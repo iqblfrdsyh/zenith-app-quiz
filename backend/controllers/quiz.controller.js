@@ -101,6 +101,13 @@ exports.createQuiz = async (req, res) => {
       return res.status(404).json({ status: 404, msg: "Topic not found" });
     }
 
+    if (![option1, option2, option3, option4].includes(correct_answer)) {
+      return res.status(400).json({
+        status: 400,
+        msg: "The correct answer must be one of the provided options",
+      });
+    }
+
     const newQuiz = await Quiz.create({
       topicId,
       question,
@@ -203,7 +210,6 @@ exports.updateQuiz = async (req, res) => {
     return res.status(500).json({ status: 500, msg: error.message });
   }
 };
-
 
 exports.deleteQuiz = async (req, res) => {
   try {

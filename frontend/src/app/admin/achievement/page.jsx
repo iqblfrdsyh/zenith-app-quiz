@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Forms } from "@/components/form";
 import { Tables } from "@/components/table";
-import { create, getAllData, update } from "@/libs/api-libs";
+import { create, deleteData, getAllData, update } from "@/libs/api-libs";
 import Swal from "sweetalert2";
 
 const ManageAch = () => {
@@ -31,8 +31,6 @@ const ManageAch = () => {
       required_points,
       level,
     };
-
-    console.log(achievementData);
 
     try {
       if (id) {
@@ -67,6 +65,27 @@ const ManageAch = () => {
     setEditingAchievement(achievement);
   };
 
+  const handleDelete = async (achievementId) => {
+    try {
+      const response = await deleteData("achievement/delete", achievementId);
+      setAchievements(achievements.filter((ach) => ach.id !== achievementId));
+      
+      Swal.fire({
+        title: "Deleted!",
+        text: response.msg,
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  };
+
   const handleCancelEdit = () => {
     setEditingAchievement(null);
   };
@@ -81,6 +100,7 @@ const ManageAch = () => {
       <Tables.AchievementTable
         achievements={achievements}
         onEdit={handleEdit}
+        onDelete={handleDelete}
       />
     </div>
   );

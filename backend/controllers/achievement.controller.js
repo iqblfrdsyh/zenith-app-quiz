@@ -33,21 +33,20 @@ exports.CheckAndAddAchievements = async (userId) => {
         });
       }
     }
-    
 
     if (achievementsToAdd.length) {
       await UserAchievement.bulkCreate(achievementsToAdd);
       return {
         status: 201,
         message: `${achievementsToAdd.length} achievements added to user "${user.fullname}"`,
-        data: addedAchievements,
+        datas: addedAchievements,
       };
     }
 
     return {
       status: 204,
       message: "No new achievements added",
-      data: [],
+      datas: [],
     };
   } catch (error) {
     throw new Error(error.message);
@@ -122,7 +121,7 @@ exports.createAchievement = async (req, res) => {
     return res.status(201).json({
       status: 201,
       msg: "Achievement created successfully",
-      data: newAchievement,
+      datas: newAchievement,
     });
   } catch (error) {
     return res.status(500).json({ status: 500, msg: error.message });

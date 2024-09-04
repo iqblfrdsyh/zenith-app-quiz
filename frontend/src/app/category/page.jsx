@@ -60,12 +60,12 @@ const Category = () => {
           </div>
           <div className="mt-4 grid grid-cols-2 justify-items-center items-center ">
             {categories?.map((data) => (
-              <ButtonPopup
-                key={data.id}
-                title={"Sorry"}
-                icon={"error"}
-                text={"For now can't be click"}
-              >
+              // <ButtonPopup
+              //   key={data.id}
+              //   title={"Sorry"}
+              //   icon={"error"}
+              //   text={"For now can't be click"}
+              // >
                 <Cards.CardCategory
                   image={
                     imageMapping[data.title] || "./images/icons/technology.svg"
@@ -73,7 +73,7 @@ const Category = () => {
                   title={data.title}
                   isHots={data.isHots}
                 />
-              </ButtonPopup>
+              // </ButtonPopup>
             ))}
           </div>
         </div>

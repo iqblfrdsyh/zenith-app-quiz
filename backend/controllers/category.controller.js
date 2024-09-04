@@ -46,8 +46,6 @@ exports.createCategory = async (req, res) => {
         .json({ status: 409, msg: "Category already exists" });
     }
 
-   
-
     const newCategory = await Category.create({
       title: formatTitle(title),
       isHots: isHots || false,
@@ -55,7 +53,7 @@ exports.createCategory = async (req, res) => {
 
     res
       .status(201)
-      .json({ status: 201, msg: "Category created", data: newCategory });
+      .json({ status: 201, msg: "Category created", datas: newCategory });
   } catch (error) {
     return res.status(500).json({ status: 500, msg: error.message });
   }
@@ -100,7 +98,7 @@ exports.updateCategory = async (req, res) => {
     res.status(200).json({
       status: 200,
       msg: "Category updated successfully",
-      data: existingCategory,
+      datas: existingCategory,
     });
   } catch (error) {
     return res.status(500).json({ status: 500, msg: error.message });

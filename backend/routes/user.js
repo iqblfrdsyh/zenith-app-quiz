@@ -12,7 +12,7 @@ const {
 const { verifyToken } = require("../middleware/verifyToken");
 const { refreshToken } = require("../helper/refreshToken");
 
-router.get("/user", getUser);
+router.get("/users", getUser);
 router.post("/user/signup", signup);
 router.post("/user/signin", signin);
 router.put("/user/update", updateUser);

@@ -72,7 +72,7 @@ const Forms = {
         title,
         categoryId,
       });
-    };    
+    };
 
     return (
       <form onSubmit={handleSubmit} className="mb-6 space-y-4">
@@ -272,10 +272,7 @@ const Forms = {
     };
 
     return (
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5"
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3 mb-5">
         <Select
           label="Select Topic"
           name="topicId"
@@ -292,7 +289,6 @@ const Forms = {
             </SelectItem>
           ))}
         </Select>
-
         <Input
           type="text"
           label="Input Question"
@@ -301,50 +297,170 @@ const Forms = {
           onChange={handleChange}
         />
 
-        <Input
-          type="text"
-          label="Option 1"
-          name="option1"
-          value={formData.option1}
-          onChange={handleChange}
-        />
+        <div className="grid grid-cols-2 gap-3">
+          <Input
+            type="text"
+            label="Option 1"
+            name="option1"
+            value={formData.option1}
+            onChange={handleChange}
+          />
 
-        <Input
-          type="text"
-          label="Option 2"
-          name="option2"
-          value={formData.option2}
-          onChange={handleChange}
-        />
+          <Input
+            type="text"
+            label="Option 2"
+            name="option2"
+            value={formData.option2}
+            onChange={handleChange}
+          />
 
-        <Input
-          type="text"
-          label="Option 3"
-          name="option3"
-          value={formData.option3}
-          onChange={handleChange}
-        />
+          <Input
+            type="text"
+            label="Option 3"
+            name="option3"
+            value={formData.option3}
+            onChange={handleChange}
+          />
 
-        <Input
-          type="text"
-          label="Option 4"
-          name="option4"
-          value={formData.option4}
-          onChange={handleChange}
-        />
+          <Input
+            type="text"
+            label="Option 4"
+            name="option4"
+            value={formData.option4}
+            onChange={handleChange}
+          />
 
-        <Input
-          type="text"
-          label="Correct Answer"
-          name="correct_answer"
-          value={formData.correct_answer}
-          onChange={handleChange}
-          className="col-span-2"
-        />
-
+          <Input
+            type="text"
+            label="Correct Answer"
+            name="correct_answer"
+            value={formData.correct_answer}
+            onChange={handleChange}
+            className="col-span-2"
+          />
+        </div>
         <div className="flex space-x-2">
           <Button type="submit" color="success" auto>
             {initialData.id ? "Update" : "Add"} Quiz
+          </Button>
+          {initialData.id && (
+            <Button type="button" color="warning" auto onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
+        </div>
+      </form>
+    );
+  },
+  UserForm: ({ onSubmit, initialData = {}, onCancel }) => {
+    const [formData, setFormData] = useState({
+      fullname: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
+      role: "",
+      points: "",
+    });
+
+    useEffect(() => {
+      if (initialData) {
+        setFormData({
+          fullname: initialData.fullname || "",
+          username: initialData.username || "",
+          password: "",
+          confirmPassword: "",
+          role: initialData.role || "",
+          points: initialData.points || "",
+        });
+      }
+    }, [initialData]);
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    };
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      onSubmit({ id: initialData.id, ...formData });
+    };
+
+    return (
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 mb-5">
+        <Input
+          type="text"
+          label="Fullname"
+          name="fullname"
+          value={formData.fullname}
+          onChange={handleChange}
+          required
+        />
+
+        <Input
+          type="text"
+          label="Username"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          required
+        />
+
+        {!initialData.id && (
+          <>
+            <Input
+              label="Password"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+
+            <Input
+              label="Confirm Password"
+              name="confirmPassword"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+          </>
+        )}
+
+        <Select
+          label="Role"
+          name="role"
+          selectedKeys={[formData.role]}
+          onChange={(e) =>
+            handleChange({ target: { name: "role", value: e.target.value } })
+          }
+        >
+          <SelectItem key={"admin"} value="admin">
+            Admin
+          </SelectItem>
+          <SelectItem key={"user"} value="user">
+            User
+          </SelectItem>
+        </Select>
+
+        {initialData.id && (
+          <Input
+            label="Points"
+            type="number"
+            name="points"
+            value={formData.points}
+            onChange={handleChange} 
+            isRequired
+            size="sm"
+          />
+        )}
+
+        <div className="flex space-x-2">
+          <Button type="submit" color="success" auto>
+            {initialData.id ? "Update" : "Add"} User
           </Button>
           {initialData.id && (
             <Button type="button" color="warning" auto onClick={onCancel}>

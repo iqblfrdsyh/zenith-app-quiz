@@ -43,11 +43,15 @@ exports.getUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     const { userId } = req.query;
-    const { points } = req.body;
+    const { fullname, username, role, points } = req.body;
 
     const user = await User.findByPk(userId);
 
+    user.fullname = fullname || user.fullname;
+    user.username = username || user.username;
+    user.role = role || user.role;
     user.points += parseInt(points || 0);
+
     await user.save();
 
     const achievementResult = await CheckAndAddAchievements(userId);
@@ -60,12 +64,36 @@ exports.updateUser = async (req, res) => {
 
     await updateLeaderboard();
 
-    res.status(200).json({
-      status: 200,
-      msg: "User updated successfully",
+    const dataUserUpdate = await User.findByPk(userId, {
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        {
+          model: Leaderboard,
+          as: "leaderboard",
+          attributes: { exclude: ["id", "userId", "createdAt", "updatedAt"] },
+        },
+        {
+          model: Achievement,
+          as: "achievements",
+          attributes: {
+            exclude: ["UserAchievement", "createdAt", "updatedAt"],
+          },
+          through: { attributes: [] },
+        },
+      ],
+    });
+
+    const formatUpdateUser = {
+      ...dataUserUpdate.toJSON(),
       status_achievements: achievementResult.status,
       msg_achievements: achievementResult.message,
       newAchievements: achievementResult.data,
+    };
+
+    res.status(200).json({
+      status: 200,
+      msg: "User updated successfully",
+      datas: formatUpdateUser,
     });
   } catch (error) {
     res.status(500).json({ status: 500, msg: error.message });
@@ -110,7 +138,7 @@ exports.signup = async (req, res) => {
     const randomChara = uuidv4().slice(0, 4);
     const userID = `zenID-${randomChara}`;
 
-    await User.create({
+    const newUser = await User.create({
       id: userID,
       fullname,
       username,
@@ -120,7 +148,9 @@ exports.signup = async (req, res) => {
       role: role || "user",
     });
 
-    res.status(201).json({ status: 201, msg: "New user created" });
+    res
+      .status(201)
+      .json({ status: 201, msg: "New user created", datas: newUser });
   } catch (error) {
     res.status(500).json({ status: 500, msg: error.message });
   }

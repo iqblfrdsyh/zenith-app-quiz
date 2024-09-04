@@ -47,7 +47,13 @@ const Tables = {
             {categories?.map((category) => (
               <TableRow key={category.id}>
                 <TableCell>{category.title}</TableCell>
-                <TableCell>{category.isHots ? "True" : "False"}</TableCell>
+                <TableCell
+                  className={`font-semibold ${
+                    category.isHots === true ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  {category.isHots ? "True" : "False"}
+                </TableCell>
                 <TableCell>
                   <Button
                     auto
@@ -111,7 +117,7 @@ const Tables = {
       </div>
     );
   },
-  AchievementTable: ({ achievements, onEdit }) => {
+  AchievementTable: ({ achievements, onEdit, onDelete }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -149,14 +155,29 @@ const Tables = {
                 <TableCell>{achievement.title}</TableCell>
                 <TableCell>{achievement.required_points}</TableCell>
                 <TableCell>{achievement.level}</TableCell>
-                <TableCell>
+                <TableCell className="flex flex-col md:flex-row gap-2">
                   <Button
+                    flat
                     auto
                     color="primary"
-                    onClick={() => onEdit(achievement.id)}
+                    onClick={() => onEdit(quiz.id)}
                   >
                     Edit
                   </Button>
+                  <ButtonPopup
+                    title={"Warning!"}
+                    text={"Are you sure to delete this quiz?"}
+                    icon={"warning"}
+                    onConfirm={() => onDelete(quiz.id)}
+                    confirmButtonText={"Delete"}
+                    cancelButtonText={"Cancel"}
+                    confirmButtonColor={"red"}
+                    flat
+                    auto
+                    color="danger"
+                  >
+                    Delete
+                  </ButtonPopup>
                 </TableCell>
               </TableRow>
             ))}
@@ -165,7 +186,15 @@ const Tables = {
       </div>
     );
   },
-  QuizTable: ({ quizzes, onEdit, onDelete, onConfirm }) => {
+  QuizTable: ({ quizzes, onEdit, onDelete }) => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+      if (quizzes.length > 0 || quizzes.length === 0) {
+        setIsLoading(false);
+      }
+    }, [quizzes]);
+
     return (
       <Table
         aria-label="Quiz Table"
@@ -187,7 +216,11 @@ const Tables = {
           <TableColumn>Correct Answer</TableColumn>
           <TableColumn>Actions</TableColumn>
         </TableHeader>
-        <TableBody>
+        <TableBody
+          isLoading={isLoading}
+          loadingContent={<Spinner label="Loading..." />}
+          emptyContent={"No found data quiz"}
+        >
           {quizzes?.map((quiz) => (
             <TableRow key={quiz.id}>
               <TableCell>{quiz.topic.title}</TableCell>
@@ -197,7 +230,7 @@ const Tables = {
               <TableCell>{quiz.option3}</TableCell>
               <TableCell>{quiz.option4}</TableCell>
               <TableCell>{quiz.correct_answer}</TableCell>
-              <TableCell className="grid grid-cols-2 gap-2">
+              <TableCell className="grid md:grid-cols-2 gap-2">
                 <Button
                   flat
                   auto
@@ -220,6 +253,61 @@ const Tables = {
                 >
                   Delete
                 </ButtonPopup>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  },
+  UserTable: ({ users, onEdit }) => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+      if (users.length > 0 || users.length === 0) {
+        setIsLoading(false);
+      }
+    }, [users]);
+
+    return (
+      <Table
+        aria-label="User management table"
+        css={{
+          height: "auto",
+          minWidth: "100%",
+        }}
+      >
+        <TableHeader>
+          <TableColumn>ID</TableColumn>
+          <TableColumn>Full Name</TableColumn>
+          <TableColumn>Username</TableColumn>
+          <TableColumn>Points</TableColumn>
+          <TableColumn>Achievement</TableColumn>
+          <TableColumn>Role</TableColumn>
+          <TableColumn>Actions</TableColumn>
+        </TableHeader>
+        <TableBody
+          isLoading={isLoading}
+          loadingContent={<Spinner label="Loading..." />}
+          emptyContent={"No found data user"}
+        >
+          {users?.map((user) => (
+            <TableRow key={user.id}>
+              <TableCell>{user.id}</TableCell>
+              <TableCell>{user.fullname}</TableCell>
+              <TableCell>{user.username}</TableCell>
+              <TableCell>{user.points}</TableCell>
+              <TableCell>{user.achievement}</TableCell>
+              <TableCell>{user.role.charAt(0).toUpperCase() + user.role.slice(1)}</TableCell>
+              <TableCell>
+                <Button
+                  auto
+                  flat
+                  color="primary"
+                  onClick={() => onEdit(user.id)}
+                >
+                  Edit
+                </Button>
               </TableCell>
             </TableRow>
           ))}

@@ -23,10 +23,12 @@ export async function create(endpoint, datas) {
   }
 }
 
-export async function update(endpoint, categoryId, datas) {
+export async function update(endpoint, id, datas) {
   try {
     const response = await axios.put(
-      `${base_url}/api/v1/${endpoint}?id=${categoryId}`,
+      `${base_url}/api/v1/${endpoint}?${
+        typeof id === "string" ? "userId" : "id"
+      }=${id}`,
       datas
     );
     return response.data;
