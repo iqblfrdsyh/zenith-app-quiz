@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Forms } from "@/components/form";
 import { Tables } from "@/components/table";
-import { create, deleteData, getAllData, update } from "@/libs/api-libs";
+import { create, deleteData, getData, update } from "@/libs/api-libs";
 import Swal from "sweetalert2";
 
 const ManageQuiz = () => {
@@ -14,7 +14,7 @@ const ManageQuiz = () => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const response = await getAllData("quizzes");
+        const response = await getData("quizzes");
         setQuizzes(response.datas);
       } catch (error) {
         console.error("Error fetching quizzes:", error);
@@ -23,7 +23,7 @@ const ManageQuiz = () => {
 
     const fetchTopics = async () => {
       try {
-        const response = await getAllData("topics");
+        const response = await getData("topics");
         setTopics(response.datas);
       } catch (error) {
         console.error("Error fetching topics:", error);

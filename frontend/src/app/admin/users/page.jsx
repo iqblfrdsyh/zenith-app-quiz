@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Forms } from "@/components/form";
 import { Tables } from "@/components/table";
-import { create, getAllData, update } from "@/libs/api-libs";
+import { create, getData, update } from "@/libs/api-libs";
 import Swal from "sweetalert2";
 
 const ManageUsers = () => {
@@ -13,7 +13,7 @@ const ManageUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await getAllData("users");
+        const response = await getData("users");
         setUsers(response.datas);
       } catch (error) {
         console.error("Error fetching users:", error);

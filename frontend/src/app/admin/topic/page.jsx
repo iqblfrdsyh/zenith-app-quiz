@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Forms } from "@/components/form";
 import { Tables } from "@/components/table";
-import { create, getAllData, update } from "@/libs/api-libs";
+import { create, getData, update } from "@/libs/api-libs";
 import Swal from "sweetalert2";
 
 const ManageTopic = () => {
@@ -14,7 +14,7 @@ const ManageTopic = () => {
   useEffect(() => {
     const fetchTopics = async () => {
       try {
-        const response = await getAllData("topics");
+        const response = await getData("topics");
         setTopics(response?.datas || []);
       } catch (error) {
         console.error("Error fetching topics:", error);
@@ -22,7 +22,7 @@ const ManageTopic = () => {
     };
     const fetchCategories = async () => {
       try {
-        const responseCategory = await getAllData("categories");
+        const responseCategory = await getData("categories");
         setCategories(responseCategory?.datas || []);
       } catch (error) {
         console.error("Error fetching topics:", error);

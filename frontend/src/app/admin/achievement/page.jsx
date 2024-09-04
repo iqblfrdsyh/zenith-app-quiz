@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Forms } from "@/components/form";
 import { Tables } from "@/components/table";
-import { create, deleteData, getAllData, update } from "@/libs/api-libs";
+import { create, deleteData, getData, update } from "@/libs/api-libs";
 import Swal from "sweetalert2";
 
 const ManageAch = () => {
@@ -13,7 +13,7 @@ const ManageAch = () => {
   useEffect(() => {
     const fetchAchievements = async () => {
       try {
-        const response = await getAllData("achievements");
+        const response = await getData("achievements");
         setAchievements(response.datas);
       } catch (error) {
         console.error("Error fetching achievements:", error);
@@ -69,7 +69,7 @@ const ManageAch = () => {
     try {
       const response = await deleteData("achievement/delete", achievementId);
       setAchievements(achievements.filter((ach) => ach.id !== achievementId));
-      
+
       Swal.fire({
         title: "Deleted!",
         text: response.msg,

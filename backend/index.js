@@ -9,7 +9,14 @@ const app = express();
 
 const PORT = process.env.PORT;
 
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: ["http://localhost:3000"],
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));

@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { getAllData } from "@/libs/api-libs";
+import { getData } from "@/libs/api-libs";
 
 ChartJS.register(
   CategoryScale,
@@ -53,7 +53,7 @@ const Charts = () => {
 
   const fetchData = async () => {
     try {
-      const response = await getAllData("totalData");
+      const response = await getData("totalData");
       setData({
         quizzes: response.data[0].quizzes,
         categories: response.data[0].category,
@@ -65,7 +65,7 @@ const Charts = () => {
       console.error("Error fetching data:", error);
     }
   };
-  
+
   useEffect(() => {
     fetchData();
   }, []);

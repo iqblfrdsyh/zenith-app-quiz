@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SidebarAdmin from "../sidebar";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { getData } from "@/libs/api-libs";
 
 const menuItems = [
   { href: "/admin/dashboard", label: "Dashboard" },
@@ -21,17 +23,33 @@ const getActiveTitle = (pathname, menuItems) => {
 
 export function AdminLayout({ children }) {
   const pathname = usePathname();
-  const isHiddenSidebar = ["/admin/signin"].includes(pathname);
+  const isHiddenSidebar = ["/admin/auth"].includes(pathname);
   const activeTitle = getActiveTitle(pathname, menuItems);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const refreshToken = async () => {
+      try {
+        await getData("token");
+      } catch (error) {
+        if (error) {
+          router.push("/admin/auth");
+        }
+      }
+    };
+
+    refreshToken();
+  }, []);
 
   return (
     <div className="flex">
       {!isHiddenSidebar && <SidebarAdmin menuItems={menuItems} />}
 
       <main
-        className={`absolute top-10 p-5 overflow-x-hidden overflow-y-scroll h-screen md:top-0 w-screen ${
-          isHiddenSidebar ? "" : "md:ml-64 md:w-[82%]"
-        }`}
+        className={`absolute h-screen md:top-0 w-screen ${
+          isHiddenSidebar ? "" : "md:ml-64 md:w-[82%] p-5 top-10"
+        } overflow-y-auto`}
       >
         {!isHiddenSidebar && (
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold p-3 hidden md:block">

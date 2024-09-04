@@ -221,7 +221,7 @@ exports.signin = async (req, res) => {
     req.user = { userId, fullname, username: uname, achievement, points, role };
     req.user = { userId, fullname, username: uname, achievement, points, role };
 
-    res.json({ accessToken });
+    res.json({ role, accessToken });
   } catch (error) {
     res.status(500).json({ status: 500, msg: error.message });
   }

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Forms } from "@/components/form";
 import { Tables } from "@/components/table";
-import { create, getAllData, update } from "@/libs/api-libs";
+import { create, getData, update } from "@/libs/api-libs";
 import Swal from "sweetalert2";
 
 const ManageCategory = () => {
@@ -13,7 +13,7 @@ const ManageCategory = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await getAllData("categories");
+        const response = await getData("categories");
         setCategories(response?.datas);
       } catch (error) {
         Swal.fire({
