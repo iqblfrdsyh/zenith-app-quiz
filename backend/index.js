@@ -5,6 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const routes = require("./routes/index");
+const path = require("path");
 const app = express();
 
 const PORT = process.env.PORT;
@@ -18,6 +19,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "./public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 app.use(cookieParser());

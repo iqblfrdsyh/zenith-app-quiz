@@ -8,9 +8,6 @@ const {
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
-const path = require("path");
-const crypto = require("crypto");
 const { updateLeaderboard } = require("./leaderboard.controller.js");
 const { CheckAndAddAchievements } = require("./achievement.controller.js");
 const { default: axios } = require("axios");
@@ -107,42 +104,22 @@ exports.updateUser = async (req, res) => {
 exports.signup = async (req, res) => {
   try {
     const { fullname, username, password, confirmPassword, role } = req.body;
-    let image_url = "";
+    let profile_url = "";
     let image = "";
 
     const dataGender = await axios.get(
       `https://api.genderize.io/?name=${fullname}`
     );
 
-    if (dataGender.gender === "male") {
+    if (dataGender.data.gender === "male") {
       image = "male1.jpg";
+    } else {
+      image = `female${Math.floor(Math.random() * 4) + 1}.jpg`;
     }
 
-    const imageTimestamp = Date.now();
-    const imageExt = path.extname(image);
-    const imageRandomString = crypto.randomBytes(8).toString("hex");
-    const imageFileName = `${imageTimestamp}-${imageRandomString}${imageExt}`;
-    const imagePath = `./public/images/user-avatars/${imageFileName}`;
-    image_url = `${req.protocol}://${req.get(
+    profile_url = `${req.protocol}://${req.get(
       "host"
-    )}/images/user-avatars/${imageFileName}`;
-
-    const allowedType = [".png", ".jpg", ".jpeg"];
-    if (!allowedType.includes(imageExt.toLowerCase()))
-      return res.status(422).json({ msg: "Invalid image type" });
-
-    const maxSize = 10000000;
-    if (imageFile.size > maxSize) {
-      return res
-        .status(422)
-        .json({ msg: "Ukuran file tidak boleh melebihi 10MB" });
-    }
-
-    imageFile.mv(imagePath, async (err) => {
-      if (err) {
-        return res.status(500).json({ msg: err.message });
-      }
-    });
+    )}/images/user-avatars/${image}`;
 
     if (
       trimmedValue(fullname) ||
@@ -168,7 +145,6 @@ exports.signup = async (req, res) => {
     }
 
     const userData = await User.findOne({ where: { username } });
-
     if (userData) {
       return res.status(400).json({ status: 400, msg: "Username telah ada" });
     }
@@ -182,8 +158,8 @@ exports.signup = async (req, res) => {
       fullname,
       username,
       password: hashedPassword,
-      image_url: image_url || "",
-      gender: dataGender.gender || "",
+      profile_url: profile_url || "",
+      gender: dataGender.data.gender || "",
       achievement: 0,
       points: 0,
       role: role || "user",
@@ -227,6 +203,8 @@ exports.signin = async (req, res) => {
     const userId = user[0].id;
     const fullname = user[0].fullname;
     const uname = user[0].username;
+    const profile_url = user[0].profile_url;
+    const gender = user[0].gender;
     const achievement = user[0].achievement;
     const points = user[0].points;
     const role = user[0].role;
@@ -259,8 +237,16 @@ exports.signin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    req.user = { userId, fullname, username: uname, achievement, points, role };
-    req.user = { userId, fullname, username: uname, achievement, points, role };
+    req.user = {
+      userId,
+      fullname,
+      username: uname,
+      profile_url,
+      gender,
+      achievement,
+      points,
+      role,
+    };
 
     res.json({ role, accessToken });
   } catch (error) {
@@ -305,6 +291,8 @@ exports.isLogin = async (req, res) => {
         "id",
         "fullname",
         "username",
+        "profile_url",
+        "gender",
         "achievement",
         "points",
         "role",
