@@ -32,9 +32,9 @@ const AuthAdmin = () => {
           title: "Success Login",
         }).then(() => {
           router.push("/admin/dashboard");
-          // console.log("Ok");
         });
       } else {
+        setIsloading(false);
         Swal.fire({
           icon: "error",
           title: "Unauthorized",

@@ -32,7 +32,6 @@ const Category = () => {
     fetchCategories();
   }, []);
 
-
   return (
     <div className="relative">
       <div className="absolute inset-0 bg-gradient-to-b from-[#C4E8E5] to-[#3FBBB0] z-20"></div>
@@ -68,6 +67,7 @@ const Category = () => {
               //   text={"For now can't be click"}
               // >
               <Cards.CardCategory
+                key={data.id}
                 image={
                   imageMapping[data.title] || "./images/icons/technology.svg"
                 }
