@@ -16,12 +16,7 @@ const ManageCategory = () => {
         const response = await getData("categories");
         setCategories(response?.datas);
       } catch (error) {
-        Swal.fire({
-          title: "Error!",
-          text: error.message,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+        console.error("Error fetching category:", error);
       }
     };
 

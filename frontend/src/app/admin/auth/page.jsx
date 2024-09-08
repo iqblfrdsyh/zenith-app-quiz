@@ -31,8 +31,8 @@ const AuthAdmin = () => {
           icon: "success",
           title: "Success Login",
         }).then(() => {
-          // router.push("/admin/dashboard");
-          console.log("Ok");
+          router.push("/admin/dashboard");
+          // console.log("Ok");
         });
       } else {
         Swal.fire({
@@ -42,6 +42,7 @@ const AuthAdmin = () => {
         });
       }
     } catch (error) {
+      setIsloading(false);
       Swal.fire({
         icon: "error",
         title: error.message,
