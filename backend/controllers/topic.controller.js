@@ -24,6 +24,32 @@ exports.getAllTopic = async (req, res) => {
   }
 };
 
+exports.getTopicByCategory = async (req, res) => {
+  const { categoryId } = req.query;
+
+  try {
+    const datas = await Category.findAll({
+      where: { id: categoryId },
+      include: [
+        {
+          model: Topic,
+          through: { attributes: [] },
+          attributes: ["id", "title"],
+          as: "topics",
+        },
+      ],
+    });
+
+    if (!datas.length) {
+      return res.status(404).json({ msg: "No data found" });
+    }
+
+    return res.status(200).json({ status: 200, total: datas.length, datas });
+  } catch (error) {
+    return res.status(500).json({ status: 500, msg: error.message });
+  }
+};
+
 exports.createTopic = async (req, res) => {
   try {
     const { title, categoryId } = req.body;

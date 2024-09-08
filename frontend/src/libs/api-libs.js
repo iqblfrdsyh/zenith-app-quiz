@@ -14,6 +14,20 @@ export async function getData(endpoint) {
     throw new Error(errorMessage);
   }
 }
+export async function getDataByParams(endpoint, params) {
+  try {
+    const response = await axios.get(
+      `${base_url}/api/v1/${endpoint}?${params}`,
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    const errorMessage = error.response?.data?.msg || "An error occurred";
+    throw new Error(errorMessage);
+  }
+}
 
 export async function create(endpoint, datas) {
   try {

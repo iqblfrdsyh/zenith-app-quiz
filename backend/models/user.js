@@ -24,6 +24,8 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
       },
       password: DataTypes.TEXT,
+      profile_url: DataTypes.TEXT,
+      gender: DataTypes.STRING,
       achievement: DataTypes.INTEGER,
       points: DataTypes.INTEGER,
       role: DataTypes.ENUM("admin", "user"),

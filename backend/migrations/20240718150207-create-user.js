@@ -19,6 +19,12 @@ module.exports = {
       password: {
         type: Sequelize.TEXT,
       },
+      profile_url: {
+        type: Sequelize.TEXT,
+      },
+      gender: {
+        type: Sequelize.STRING,
+      },
       achievement: {
         type: Sequelize.INTEGER,
       },

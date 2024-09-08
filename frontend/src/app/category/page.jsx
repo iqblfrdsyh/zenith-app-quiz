@@ -3,8 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Image } from "@nextui-org/react";
 import { Cards } from "@/components/cards";
-import { getAllData } from "@/libs/api-libs";
-import ButtonPopup from "@/components/buttonPopup";
+import { getData } from "@/libs/api-libs";
 
 const imageMapping = {
   Math: "./images/icons/math.svg",
@@ -23,7 +22,7 @@ const Category = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await getAllData("categories");
+        const response = await getData("categories");
         setCategories(response?.datas);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -32,6 +31,7 @@ const Category = () => {
 
     fetchCategories();
   }, []);
+
 
   return (
     <div className="relative">
@@ -58,6 +58,7 @@ const Category = () => {
               radius="none"
             />
           </div>
+
           <div className="mt-4 grid grid-cols-2 justify-items-center items-center ">
             {categories?.map((data) => (
               // <ButtonPopup
@@ -66,13 +67,13 @@ const Category = () => {
               //   icon={"error"}
               //   text={"For now can't be click"}
               // >
-                <Cards.CardCategory
-                  image={
-                    imageMapping[data.title] || "./images/icons/technology.svg"
-                  }
-                  title={data.title}
-                  isHots={data.isHots}
-                />
+              <Cards.CardCategory
+                image={
+                  imageMapping[data.title] || "./images/icons/technology.svg"
+                }
+                title={data.title}
+                isHots={data.isHots}
+              />
               // </ButtonPopup>
             ))}
           </div>
