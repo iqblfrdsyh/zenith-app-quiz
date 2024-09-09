@@ -1,11 +1,14 @@
 import axios from "axios";
 
-// const base_url = process.env.NEXT_PUBLIC_BASE_API_URL;
-const base_url = "http://localhost:6543";
+const base_url = process.env.NEXT_PUBLIC_BASE_API_URL;
+const apikey = process.env.NEXT_PUBLIC_ZEN_APIKEY;
 
 export async function getData(endpoint) {
   try {
     const response = await axios.get(`${base_url}/api/v1/${endpoint}`, {
+      headers: {
+        apikey,
+      },
       withCredentials: true,
     });
     return response.data;
@@ -19,6 +22,9 @@ export async function getDataByParams(endpoint, params) {
     const response = await axios.get(
       `${base_url}/api/v1/${endpoint}?${params}`,
       {
+        headers: {
+          apikey,
+        },
         withCredentials: true,
       }
     );
@@ -31,7 +37,11 @@ export async function getDataByParams(endpoint, params) {
 
 export async function create(endpoint, datas) {
   try {
-    const response = await axios.post(`${base_url}/api/v1/${endpoint}`, datas);
+    const response = await axios.post(`${base_url}/api/v1/${endpoint}`, datas, {
+      headers: {
+        apikey,
+      },
+    });
     return response.data;
   } catch (error) {
     const errorMessage = error.response?.data?.msg || "An error occurred";
@@ -45,7 +55,12 @@ export async function update(endpoint, id, datas) {
       `${base_url}/api/v1/${endpoint}?${
         typeof id === "string" ? "userId" : "id"
       }=${id}`,
-      datas
+      datas,
+      {
+        headers: {
+          apikey,
+        },
+      }
     );
     return response.data;
   } catch (error) {
@@ -57,7 +72,12 @@ export async function update(endpoint, id, datas) {
 export async function deleteData(endpoint, id) {
   try {
     const response = await axios.delete(
-      `${base_url}/api/v1/${endpoint}?id=${id}`
+      `${base_url}/api/v1/${endpoint}?id=${id}`,
+      {
+        headers: {
+          apikey,
+        },
+      }
     );
     return response.data;
   } catch (error) {
@@ -69,6 +89,9 @@ export async function deleteData(endpoint, id) {
 export async function auth(endpoint, data) {
   try {
     const response = await axios.post(`${base_url}/api/v1/${endpoint}`, data, {
+      headers: {
+        apikey,
+      },
       withCredentials: true,
     });
     return response.data;
@@ -81,10 +104,11 @@ export async function auth(endpoint, data) {
 export async function getDataUser(endpoint, token) {
   try {
     const response = await axios.get(`${base_url}/api/v1/${endpoint}`, {
-      withCredentials: true,
       headers: {
         Authorization: `Bearer ${token}`,
+        apikey,
       },
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {

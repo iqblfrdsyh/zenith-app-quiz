@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const routes = require("./routes/index");
 const path = require("path");
+const { secure } = require("./middleware/secure");
 const app = express();
 
 const PORT = process.env.PORT;
@@ -33,7 +34,7 @@ app.get("/api/v1", (req, res) => {
 });
 
 Object.values(routes).forEach((route) => {
-  app.use("/api/v1", route);
+  app.use("/api/v1", secure, route);
 });
 
 app.get("*", (req, res) => {
