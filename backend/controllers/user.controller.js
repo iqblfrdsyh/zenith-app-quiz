@@ -303,7 +303,13 @@ exports.isLogin = async (req, res) => {
       return res.status(404).json({ status: 404, msg: "User tidak ditemukan" });
     }
 
-    res.json({ user });
+    const totalAchievements = await UserAchievement.count({
+      where: { userId },
+    });
+
+    await user.update({ achievement: totalAchievements });
+
+    res.status(200).json({ status: 200, user });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

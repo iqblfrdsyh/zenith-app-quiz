@@ -6,6 +6,7 @@ const {
   createAchievement,
   deleteAchievement,
 } = require("../controllers/achievement.controller");
+const { updateUser } = require("../controllers/user.controller");
 
 router.get("/achievements", getAllAchievements);
 router.delete("/achievement/delete", deleteAchievement);

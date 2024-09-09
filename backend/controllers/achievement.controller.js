@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const { trimmedValue } = require("../helper/functions");
 const { User, Achievement, UserAchievement } = require("../helper/relation");
+const { updateUser } = require("./user.controller");
 
 exports.CheckAndAddAchievements = async (userId) => {
   try {
