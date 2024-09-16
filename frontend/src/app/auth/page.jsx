@@ -41,8 +41,16 @@ const AuthPage = () => {
 
   return (
     <section className="bg-teal-500 min-h-screen flex flex-col justify-end">
-      <div className="sticky bottom-0 left-0 right-0 w-full bg-teal-50/75 px-12 py-4 rounded-t-3xl min-h-[40vh] font-normal transition-all duration-500 ease-in-out">
-        <div className="flex justify-center items-center font-bold my-6">
+      <div
+        className={`sticky bottom-0 left-0 right-0 w-full bg-teal-50/75 px-12 pt-3 rounded-t-3xl font-normal ${
+          isSignIn ? "pb-8" : "pb-4"
+        }`}
+      >
+        <div
+          className={`flex justify-center items-center font-bold mt-5 ${
+            isSignIn ? "mb-10" : "mb-0"
+          }`}
+        >
           <button
             onClick={() => setIsSignIn(true)}
             className={`py-1 px-8 border-2 border-teal-500 rounded-l-lg transition-colors duration-300 ${
@@ -65,7 +73,7 @@ const AuthPage = () => {
           </button>
         </div>
 
-        <form className="flex flex-col justify-center items-center mt-14 space-y-6">
+        <form className={`flex flex-col justify-center items-center mt-6 ${isSignIn ? "space-y-6" : "space-y-3.5"}`}>
           {renderFields.map((field, index) => (
             <InputField
               key={index}
@@ -76,7 +84,7 @@ const AuthPage = () => {
             />
           ))}
 
-          <div className="my-6 space-y-8 w-full">
+          <div className={`w-full ${isSignIn ? "space-y-8 mt-4" : "space-y-3.5"}`}>
             {isSignIn && (
               <a href="/" className="text-teal-500 font-semibold text-sm">
                 Forgot Password?
@@ -84,14 +92,14 @@ const AuthPage = () => {
             )}
             <button
               type="submit"
-              className="bg-teal-500 w-full text-center rounded-full py-3 text-white/90 font-semibold"
+              className="bg-teal-500 w-full text-center rounded-full py-2.5 text-white/90 font-semibold mt-2"
             >
               {isSignIn ? "Sign In" : "Sign Up"}
             </button>
             <button
               type="button"
               onClick={() => setIsSignIn(!isSignIn)}
-              className="w-full text-center rounded-full py-2 text-teal-500 font-semibold"
+              className={`w-full text-center rounded-full text-teal-500 font-semibold`}
             >
               {isSignIn ? "Don't have an account?" : "Already have an account?"}
             </button>

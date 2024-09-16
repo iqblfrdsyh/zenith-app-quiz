@@ -8,7 +8,7 @@ const InputField = ({ type, name, placeholder, image }) => (
       radius="none"
       width={20}
       height={20}
-      className="absolute left-4 top-3.5"
+      className="absolute left-4 top-3"
     />
     <label htmlFor={name} className="sr-only">
       {placeholder}
@@ -17,7 +17,7 @@ const InputField = ({ type, name, placeholder, image }) => (
       type={type}
       name={name}
       id={name}
-      className="block pt-3 pb-2.5 pl-12 pr-4 w-full bg-white/90 text-gray-900 outline-teal-500 rounded-lg font-semibold h-12"
+      className="block pt-3 pb-2.5 pl-12 pr-4 w-full bg-white/90 text-gray-900 outline-teal-500 rounded-lg font-semibold h-11"
       placeholder={placeholder}
     />
   </div>
